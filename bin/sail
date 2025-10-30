@@ -273,18 +273,6 @@ elif [ "$1" == "composer" ]; then
         sail_is_not_running
     fi
 
-# Proxy Artisan commands to the "artisan" binary on the application container...
-elif [ "$1" == "artisan" ] || [ "$1" == "art" ] || [ "$1" == "a" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php artisan)
-    else
-        sail_is_not_running
-    fi
-
 # Proxy the "debug" command to the "php artisan" binary on the application container with xdebug enabled...
 elif [ "$1" == "debug" ]; then
     shift 1
@@ -297,18 +285,6 @@ elif [ "$1" == "debug" ]; then
         sail_is_not_running
     fi
 
-# Proxy the "test" command to the "php artisan test" Artisan command...
-elif [ "$1" == "test" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php artisan test)
-    else
-        sail_is_not_running
-    fi
-
 # Proxy the "phpunit" command to "php vendor/bin/phpunit"...
 elif [ "$1" == "phpunit" ]; then
     shift 1
@@ -317,70 +293,6 @@ elif [ "$1" == "phpunit" ]; then
         ARGS+=(exec -u "$APP_USER")
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=("$APP_SERVICE" php vendor/bin/phpunit)
-    else
-        sail_is_not_running
-    fi
-
-# Proxy the "pest" command to "php vendor/bin/pest"...
-elif [ "$1" == "pest" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php vendor/bin/pest)
-    else
-        sail_is_not_running
-    fi
-
-# Proxy the "pint" command to "php vendor/bin/pint"...
-elif [ "$1" == "pint" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php vendor/bin/pint)
-    else
-        sail_is_not_running
-    fi
-
-# Proxy the "dusk" command to the "php artisan dusk" Artisan command...
-elif [ "$1" == "dusk" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(-e "APP_URL=http://${APP_SERVICE}")
-        ARGS+=(-e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub")
-        ARGS+=("$APP_SERVICE" php artisan dusk)
-    else
-        sail_is_not_running
-    fi
-
-# Proxy the "dusk:fails" command to the "php artisan dusk:fails" Artisan command...
-elif [ "$1" == "dusk:fails" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(-e "APP_URL=http://${APP_SERVICE}")
-        ARGS+=(-e "DUSK_DRIVER_URL=http://selenium:4444/wd/hub")
-        ARGS+=("$APP_SERVICE" php artisan dusk:fails)
-    else
-        sail_is_not_running
-    fi
-
-# Initiate a Laravel Tinker session within the application container...
-elif [ "$1" == "tinker" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" php artisan tinker)
     else
         sail_is_not_running
     fi
@@ -421,30 +333,6 @@ elif [ "$1" == "npx" ]; then
         sail_is_not_running
     fi
 
-# Proxy PNPM commands to the "pnpm" binary on the application container...
-elif [ "$1" == "pnpm" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" pnpm)
-    else
-        sail_is_not_running
-    fi
-
-# Proxy PNPX commands to the "pnpx" binary on the application container...
-elif [ "$1" == "pnpx" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" pnpx)
-    else
-        sail_is_not_running
-    fi
-
 # Proxy Yarn commands to the "yarn" binary on the application container...
 elif [ "$1" == "yarn" ]; then
     shift 1
@@ -453,30 +341,6 @@ elif [ "$1" == "yarn" ]; then
         ARGS+=(exec -u "$APP_USER")
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=("$APP_SERVICE" yarn)
-    else
-        sail_is_not_running
-    fi
-
-# Proxy Bun commands to the "bun" binary on the application container...
-elif [ "$1" == "bun" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" bun)
-    else
-        sail_is_not_running
-    fi
-
-# Proxy Bun X commands to the "bunx" binary on the application container...
-elif [ "$1" == "bunx" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec -u "$APP_USER")
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=("$APP_SERVICE" bunx)
     else
         sail_is_not_running
     fi
@@ -490,32 +354,6 @@ elif [ "$1" == "mysql" ]; then
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=(mysql bash -c)
         ARGS+=("MYSQL_PWD=\${MYSQL_PASSWORD} mysql -u \${MYSQL_USER} \${MYSQL_DATABASE} \${MYSQL_EXTRA_OPTIONS}")
-    else
-        sail_is_not_running
-    fi
-
-# Initiate a MySQL CLI terminal session within the "mariadb" container...
-elif [ "$1" == "mariadb" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec)
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(mariadb bash -c)
-        ARGS+=("MYSQL_PWD=\${MYSQL_PASSWORD} mariadb -u \${MYSQL_USER} \${MYSQL_DATABASE}")
-    else
-        sail_is_not_running
-    fi
-
-# Initiate a PostgreSQL CLI terminal session within the "pgsql" container...
-elif [ "$1" == "psql" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec)
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(pgsql bash -c)
-        ARGS+=("PGPASSWORD=\${PGPASSWORD} psql -U \${POSTGRES_USER} \${POSTGRES_DB}")
     else
         sail_is_not_running
     fi
@@ -544,18 +382,6 @@ elif [ "$1" == "root-shell" ] || [ "$1" == "root-bash" ]; then
         sail_is_not_running
     fi
 
-# Initiate a MongoDB Shell within the "mongodb" container...
-elif [ "$1" == "mongodb" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec)
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(mongodb mongosh --port "${FORWARD_MONGODB_PORT:-27017}" --username "$MONGODB_USERNAME" --password "$MONGODB_PASSWORD" --authenticationDatabase admin)
-    else
-        sail_is_not_running
-    fi
-
 # Initiate a Redis CLI terminal session within the "redis" container...
 elif [ "$1" == "redis" ]; then
     shift 1
@@ -564,18 +390,6 @@ elif [ "$1" == "redis" ]; then
         ARGS+=(exec)
         [ ! -t 0 ] && ARGS+=(-T)
         ARGS+=(redis redis-cli)
-    else
-        sail_is_not_running
-    fi
-
-# Initiate a Valkey CLI terminal session within the "valkey" container...
-elif [ "$1" == "valkey" ]; then
-    shift 1
-
-    if [ "$EXEC" == "yes" ]; then
-        ARGS+=(exec)
-        [ ! -t 0 ] && ARGS+=(-T)
-        ARGS+=(valkey valkey-cli)
     else
         sail_is_not_running
     fi
