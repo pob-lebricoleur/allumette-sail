@@ -297,6 +297,18 @@ elif [ "$1" == "phpunit" ]; then
         sail_is_not_running
     fi
 
+# Proxy the "phinx" command to "php vendor/bin/phinx"...
+elif [ "$1" == "phinx" ]; then
+    shift 1
+
+    if [ "$EXEC" == "yes" ]; then
+        ARGS+=(exec -u "$APP_USER")
+        [ ! -t 0 ] && ARGS+=(-T)
+        ARGS+=("$APP_SERVICE" php vendor/bin/phinx)
+    else
+        sail_is_not_running
+    fi
+
 # Proxy Node commands to the "node" binary on the application container...
 elif [ "$1" == "node" ]; then
     shift 1
